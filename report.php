@@ -206,6 +206,8 @@
                 <?php endif; ?>
             </tr>
             <?php
+                // Include your database connection code
+                include 'connect.php';
  
                 // Initialize an array to store total counts
                 $totalCountArray = array('Student' => 0, 'Single' => 0, 'Married' => 0);
