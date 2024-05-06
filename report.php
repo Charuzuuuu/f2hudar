@@ -198,9 +198,7 @@
             <tr>
                 <th>UserID</th>
                 <th>Firstname</th>
-                <th>Lastname</th>
                 <th>Gender</th>
-                <th>Email</th>
                 <th>Birthdate</th>
                 <th>User Status</th>
                 <?php if(isset($_GET['age']) && ($_GET['age'] == '18' || $_GET['age'] == '18plus' || $_GET['age'] == '30' || $_GET['age'] == '40')): ?>
@@ -270,9 +268,7 @@
                         // Display data from tbluserprofile
                         echo "<td>" . $row['userid'] . "</td>";
                         echo "<td>" . $row['firstname'] . "</td>";
-                        echo "<td>" . $row['lastname'] . "</td>";
                         echo "<td>" . $row['gender'] . "</td>";
-                        echo "<td>" . $row['emailadd'] . "</td>";
                         echo "<td>" . $row['birthdate'] . "</td>";
                         echo "<td>" . $row['userstatus'] . "</td>";
                         if(isset($row['age'])) {
@@ -298,8 +294,6 @@
                 <th>Profile ID</th>
                 <th>Home Address</th>
                 <th>Country</th>
-                <th>Contact Number</th>
-                <th>Hobbies</th>
                 <th>User ID</th>
             </tr>
             <?php
@@ -324,8 +318,6 @@
                             echo "<td>" . $row['profileid'] . "</td>";
                             echo "<td>" . $row['homeaddress'] . "</td>";
                             echo "<td>" . $row['country'] . "</td>";
-                            echo "<td>" . $row['contactnumber'] . "</td>";
-                            echo "<td>" . $row['hobbies'] . "</td>";
                             echo "<td>" . $row['user_id'] . "</td>";
                             echo "</tr>";
                         }
