@@ -206,8 +206,6 @@
                 <?php endif; ?>
             </tr>
             <?php
-                // Include your database connection code
-                include 'connect.php';
  
                 // Initialize an array to store total counts
                 $totalCountArray = array('Student' => 0, 'Single' => 0, 'Married' => 0);
@@ -237,13 +235,13 @@
                         // Age range 18 and below
                         $query = "SELECT *, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age FROM tbluserprofile HAVING age < 18";
                     } elseif ($ageRange == '18plus') {
-                        // Age range 18+
+                        // Age range 18 - 30
                         $query = "SELECT *, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age FROM tbluserprofile HAVING age >= 18 AND age < 30";
                     } elseif ($ageRange == '30') {
-                        // Age range 30+
+                        // Age range 30 - 40
                         $query = "SELECT *, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age FROM tbluserprofile HAVING age >= 30 AND age < 40";
                     } elseif ($ageRange == '40') {
-                        // Age range 40+
+                        // Age range 40 above
                         $query = "SELECT *, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age FROM tbluserprofile HAVING age >= 40";
                     }
                 } else if(isset($_GET['gender'])){
@@ -260,25 +258,26 @@
                 if($query){
                     $result = mysqli_query($connection, $query);
  
-                // Check if there are any records
-                if (mysqli_num_rows($result) > 0) {
-                    // Loop through each row of data
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        echo "<tr>";
-                        // Display data from tbluserprofile
-                        echo "<td>" . $row['userid'] . "</td>";
-                        echo "<td>" . $row['firstname'] . "</td>";
-                        echo "<td>" . $row['gender'] . "</td>";
-                        echo "<td>" . $row['birthdate'] . "</td>";
-                        echo "<td>" . $row['userstatus'] . "</td>";
-                        if(isset($row['age'])) {
-                            echo "<td>" . $row['age'] . "</td>";
+                    // Check if there are any records
+                    if (mysqli_num_rows($result) > 0) {
+                        // Loop through each row of data
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            echo "<tr>";
+                            // Display data from tbluserprofile
+                            echo "<td>" . $row['userid'] . "</td>";
+                            echo "<td>" . $row['firstname'] . "</td>";
+                            echo "<td>" . $row['gender'] . "</td>";
+                            echo "<td>" . $row['birthdate'] . "</td>";
+                            echo "<td>" . $row['userstatus'] . "</td>";
+                            if(isset($row['age'])) {
+                                echo "<td>" . $row['age'] . "</td>";
+                            }
+                            echo "</tr>";
                         }
-                        echo "</tr>";
+                    } else {
+                        echo "<tr><td colspan='8'>No users found within the specified criteria</td></tr>";
                     }
-                } else {
-                    echo "<tr><td colspan='8'>No users found within the specified criteria</td></tr>";
-                }
+
                 }
             ?>
         </table>
