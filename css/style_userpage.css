@@ -84,9 +84,9 @@ header{
 }
 
 .iconBox2{
-    width: 25%;
+    width: 35%;
     display: flex;
-    margin-left: 65%;
+    margin-left: 55%;
     padding: 0 25px;
     justify-content: space-between;
 }

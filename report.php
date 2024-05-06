@@ -55,7 +55,7 @@
             cursor: pointer;
             margin-right: 5px;
         }
-
+ 
         /* Dropdown Button */
         .dropbtn {
             background-color: #f9f9f9;
@@ -130,7 +130,7 @@
         .popup th {
             background-color: #f2f2f2;
         }
-
+ 
         #exitBtn{
             background-color: #ff0000;
             color: #fff;
@@ -149,32 +149,48 @@
             <div class="header-wrapper">
                 <div class="iconBox1">
                     <i class="fa-solid fa-arrow-left" id="userpage"></i>
-                </div>     
+                </div>    
                 <div class="iconBox2">
                     <div class="dropdown">
-                        <button class="dropbtn">Show</button>
+                        <button class="dropbtn">Status</button>
                         <div class="dropdown-content">
                             <a href="?status=Student">Student</a>
                             <a href="?status=Single">Single</a>
                             <a href="?status=Married">Married</a>
                         </div>
                     </div>
-                        <button class="dropbtn"id="totalCountBtn">Total</button>
                 <!-- Dropdown for age ranges -->
                     <div class="dropdown">
                         <button class="dropbtn">Age Range</button>
                         <div class="dropdown-content">
-                            <a href="?age=18">18-</a>
-                            <a href="?age=18plus">18+</a>
-                            <a href="?age=30">30+</a>
-                            <a href="?age=40">40+</a>
+                            <a href="?age=18">18 age below</a>
+                            <a href="?age=18plus">18 - 30 age</a>
+                            <a href="?age=30">30 - 40 age</a>
+                            <a href="?age=40">40 age above</a>
                         </div>
                     </div>
-                </div> 
+                    <div class="dropdown">
+                        <button class="dropbtn">Gender</button>
+                        <div class="dropdown-content">
+                            <a href="?gender=Male">Male</a>
+                            <a href="?gender=Female">Female</a>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <button class="dropbtn">Country</button>
+                        <div class="dropdown-content">
+                            <a href="?country=USA">USA</a>
+                            <a href="?country=Philippines">Philippines</a>
+                            <a href="?country=Russia">Russia</a>
+                        </div>
+                    </div>
+                    <button class="dropbtn"id="totalCountBtn">Total</button>
+                </div>
             </div>
         </div>
     </header>
  
+    <?php if(!isset($_GET['country'])): ?>
     <div class="container">
         <h2>User Table</h2>
         <table>
@@ -206,7 +222,7 @@
                     $totalCountRow = mysqli_fetch_assoc($totalCountResult);
                     $totalCountArray[$statusKey] = $totalCountRow['total'];
                 }
-
+ 
                 $query = null;
  
                 // Check if status is set in the URL
@@ -224,18 +240,25 @@
                         $query = "SELECT *, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age FROM tbluserprofile HAVING age < 18";
                     } elseif ($ageRange == '18plus') {
                         // Age range 18+
-                        $query = "SELECT *, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age FROM tbluserprofile HAVING age >= 18";
+                        $query = "SELECT *, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age FROM tbluserprofile HAVING age >= 18 AND age < 30";
                     } elseif ($ageRange == '30') {
                         // Age range 30+
-                        $query = "SELECT *, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age FROM tbluserprofile HAVING age >= 30";
+                        $query = "SELECT *, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age FROM tbluserprofile HAVING age >= 30 AND age < 40";
                     } elseif ($ageRange == '40') {
                         // Age range 40+
                         $query = "SELECT *, TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) AS age FROM tbluserprofile HAVING age >= 40";
                     }
-                } else {
+                } else if(isset($_GET['gender'])){
+                    $gender = $_GET['gender'];
+ 
+                    // Query to fetch user data based on gender from the database
+                    $query = "SELECT * FROM tbluserprofile WHERE gender = '$gender'";
+                }
+                else {
                     echo "<tr><td colspan='8'>Please select a status from the dropdown menu or an age range from the dropdown menu</td></tr>";
                 }
-                
+                // Check if gender is set in the URL
+               
                 if($query){
                     $result = mysqli_query($connection, $query);
  
@@ -264,46 +287,129 @@
             ?>
         </table>
     </div>
+    <?php endif; ?>
  
-    <!-- Popup table for total counts -->
-    <div id="popup" class="popup">
-        <h2>Total Counts</h2>
+    <?php if(isset($_GET['country']) && !empty($_GET['country'])): ?>
+    <div class="container">
+        <h2>User Profile</h2>
         <table>
-            <!-- Only display total counts without the header -->
+            <!-- Table header -->
+            <tr>
+                <th>Profile ID</th>
+                <th>Home Address</th>
+                <th>Country</th>
+                <th>Contact Number</th>
+                <th>Hobbies</th>
+                <th>User ID</th>
+            </tr>
             <?php
-                // Loop through each status to display total counts
-                foreach ($totalCountArray as $statusKey => $totalCount) {
-                    echo "<tr>";
-                    echo "<td>$statusKey</td>";
-                    echo "<td>$totalCount</td>";
-                    echo "</tr>";
+                // Include your database connection code
+                include 'connect.php';
+ 
+                // Check if country is set in the URL
+                if (isset($_GET['country'])) {
+                    $country = $_GET['country'];
+ 
+                    // Query to fetch user profile data based on country from the database
+                    $query = "SELECT * FROM tblprofile WHERE country = '$country'";
+ 
+                    $result = mysqli_query($connection, $query);
+ 
+                    // Check if there are any records
+                    if (mysqli_num_rows($result) > 0) {
+                        // Loop through each row of data
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            echo "<tr>";
+                            // Display data from tblprofile
+                            echo "<td>" . $row['profileid'] . "</td>";
+                            echo "<td>" . $row['homeaddress'] . "</td>";
+                            echo "<td>" . $row['country'] . "</td>";
+                            echo "<td>" . $row['contactnumber'] . "</td>";
+                            echo "<td>" . $row['hobbies'] . "</td>";
+                            echo "<td>" . $row['user_id'] . "</td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='6'>No profiles found for the selected country</td></tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='6'>Please select a country from the dropdown menu</td></tr>";
                 }
             ?>
         </table>
-        <!-- Exit button to hide the popup -->
-        <button id="exitBtn">Exit</button>
     </div>
+    <?php endif; ?>
+ 
+    <!-- Popup table for total counts -->
+    <div id="popup" class="popup">
+    <h2>Total Counts</h2>
+    <table>
+        <!-- Display total counts for each status -->
+        <?php foreach ($totalCountArray as $statusKey => $totalCount): ?>
+            <tr>
+                <td><?= $statusKey ?></td>
+                <td><?= $totalCount ?></td>
+            </tr>
+        <?php endforeach; ?>
+        <!-- Include total counts for each gender -->
+        <tr>
+            <td>Male</td>
+            <td>
+                <?php
+                // Query to fetch total count of males
+                $maleCountQuery = "SELECT COUNT(*) AS male_count FROM tbluserprofile WHERE gender = 'Male'";
+                $maleCountResult = mysqli_query($connection, $maleCountQuery);
+                $maleCountRow = mysqli_fetch_assoc($maleCountResult);
+                echo $maleCountRow['male_count'];
+                ?>
+            </td>
+        </tr>
+        <tr>
+            <td>Female</td>
+            <td>
+                <?php
+                // Query to fetch total count of females
+                $femaleCountQuery = "SELECT COUNT(*) AS female_count FROM tbluserprofile WHERE gender = 'Female'";
+                $femaleCountResult = mysqli_query($connection, $femaleCountQuery);
+                $femaleCountRow = mysqli_fetch_assoc($femaleCountResult);
+                echo $femaleCountRow['female_count'];
+                ?>
+            </td>
+        </tr>
+    </table>
+    <!-- Exit button to hide the popup -->
+    <button id="exitBtn">Exit</button>
+</div>
+ 
 </body>
-
-    <script>
-        const menu = document.getElementById("userpage");
-        menu.addEventListener('click', goMenu);
-
-        function goMenu(){
-            window.location.href = "userpage.php";
-        }
-
-        // Function to handle the click event of the total count button
-        document.getElementById('totalCountBtn').addEventListener('click', function() {
+ 
+   <script>
+    const menu = document.getElementById("userpage");
+    menu.addEventListener('click', goMenu);
+ 
+    function goMenu(){
+        window.location.href = "userpage.php";
+    }
+ 
+    // Function to handle the click event of the total count button
+    document.getElementById('totalCountBtn').addEventListener('click', function() {
+        // Check if country parameter exists in the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const countryParam = urlParams.get('country');
+        // If country parameter exists, reload the page with the country parameter preserved
+        if (countryParam) {
+            window.location.href = window.location.pathname + "?country=" + countryParam;
+        } else {
             // Show the popup
             document.getElementById('popup').style.display = 'block';
-        });
+        }
+    });
  
-        // Function to handle the click event of the exit button
-        document.getElementById('exitBtn').addEventListener('click', function() {
-            // Hide the popup
-            document.getElementById('popup').style.display = 'none';
-        });
-    </script>
-
+    // Function to handle the click event of the exit button
+    document.getElementById('exitBtn').addEventListener('click', function() {
+        // Hide the popup
+        document.getElementById('popup').style.display = 'none';
+    });
+</script>
+ 
 </html>
