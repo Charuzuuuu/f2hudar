@@ -154,7 +154,6 @@
                     <div class="dropdown">
                         <button class="dropbtn">Civil Status</button>
                         <div class="dropdown-content">
-                            <a href="?status=Student">Student</a>
                             <a href="?status=Single">Single</a>
                             <a href="?status=Married">Married</a>
                         </div>
