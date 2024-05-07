@@ -152,7 +152,7 @@
                 </div>    
                 <div class="iconBox2">
                     <div class="dropdown">
-                        <button class="dropbtn">Status</button>
+                        <button class="dropbtn">Civil Status</button>
                         <div class="dropdown-content">
                             <a href="?status=Student">Student</a>
                             <a href="?status=Single">Single</a>
