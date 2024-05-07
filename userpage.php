@@ -25,7 +25,6 @@
                 <div class="iconBox2">
                     <i class="fa-solid fa-house"></i>
                     <i class="fa-solid fa-gear"></i>
-                    <i class="fa-solid fa-circle-plus" id="report"></i>
                     <i class="fa-solid fa-user" id="profile"></i>
                     <i class="fa-solid fa-circle-half-stroke" id="darkTheme"></i>
                 </div>

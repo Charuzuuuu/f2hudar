@@ -61,7 +61,7 @@
             padding: 0;
         }
         .container {
-            width: 80%;
+            width: 90%;
             margin: 20px auto;
             background-color: #fff;
             padding: 20px;
@@ -124,6 +124,7 @@
                     <i class="fa-solid fa-arrow-left" id="userpage"></i>
                 </div>
                 <div class="iconBox2">
+                    <i class="fa-solid fa-circle-plus" id="report"></i>
                     <i class="fa-solid fa-plus" id="add_admin"></i>
                     <label id="dash_label">Add New Admin</label>
                 </div>
@@ -181,6 +182,7 @@
                         echo "<form method='post'>";
                         echo "<input type='hidden' name='userID' value='" . $row1['userid'] . "'>";
                         echo "<button type='submit' name='delete1' class='delete-btn'>Delete</button>";
+                        echo "<button type='button' class='update-btn' onclick='showUpdateForm(" . $row1['userid'] . ")'>Update</button>";
                         echo "</form>";
                         echo "</td>";
 
@@ -281,13 +283,21 @@
         const adm = document.getElementById("add_admin");
         adm.onclick = goAddAdmin;
 
+        const rep = document.getElementById("report");
+        rep.onclick = goReport;
+
         function goUserPage(){
         window.location.href = "userpage.php";
         }
 
         function goAddAdmin(){
         window.location.href = "adminregister.php";
-     }
+        }
+
+        function goReport() {
+        window.location.href = "report.php";
+        }  
+
     
     </script>
 </body>

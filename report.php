@@ -191,7 +191,7 @@
  
     <?php if(!isset($_GET['country'])): ?>
     <div class="container">
-        <h2>User Table</h2>
+        <h2>USER LIST</h2>
         <table>
             <!-- Table header -->
             <tr>
@@ -209,7 +209,7 @@
                 include 'connect.php';
  
                 // Initialize an array to store total counts
-                $totalCountArray = array('Student' => 0, 'Single' => 0, 'Married' => 0);
+                $totalCountArray = array('Single' => 0, 'Married' => 0);
  
                 // Loop through each status to fetch and display total count
                 foreach ($totalCountArray as $statusKey => $totalCount) {
