@@ -7,9 +7,6 @@
     const menu = document.getElementById("menu");
     menu.onclick = goMenu;
 
-    const rep = document.getElementById("report");
-    rep.onclick = goReport;
-
     const pro = document.getElementById("profile");
     pro.onclick = goProfile;
 
@@ -31,15 +28,11 @@
 
     function goMenu(){
         window.location.href = "index.php";
-}
-
-    function goReport() {
-        window.location.href = "report.php";
     }
 
     function goReport() {
         window.location.href = "report.php";
-}
+    }
 
     function goProfile() {
         window.location.href = "profile.php";

@@ -108,8 +108,13 @@
             $sql1 ="INSERT INTO tbluserprofile(firstname, lastname, gender, emailadd, birthdate, userstatus) VALUES ('".$fname."','".$lname."','".$gender."','".$email."','".$birthdate."','".$userstatus."')";
             mysqli_query($connection,$sql1);
 
-            $sql ="INSERT INTO tbluseraccount(username, password) VALUES ('".$uname."','".$hashed_password."')";
+            $last_id = mysqli_insert_id($connection);
+
+            $sql ="INSERT INTO tbluseraccount(user_id_2, username, password) VALUES ('".$last_id."','".$uname."','".$hashed_password."')";
             mysqli_query($connection,$sql);
+
+            $sql2 = "INSERT INTO tblprofile(user_id, homeaddress, country, contactnumber, hobbies) VALUES ('".$last_id."',DEFAULT, DEFAULT, DEFAULT, DEFAULT)";
+            mysqli_query($connection,$sql2);
 
             ?>
             <script>

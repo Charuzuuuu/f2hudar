@@ -53,8 +53,17 @@
         
         
         <footer class="reglink">
-            <a href="dashboard.php"> Go back to Admin Page </a>
+            <input type="submit" id="adminPage" value="Go Back to Admin Page">
         </footer>
+
+        <script>
+        const ind = document.getElementById("adminPage");
+        ind.onclick = goAdmin;
+
+        function goAdmin(){
+        window.location.href = "dashboard.php";
+		}
+		</script>
         
     </body>
     

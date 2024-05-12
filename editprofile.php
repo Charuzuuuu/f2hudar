@@ -6,7 +6,7 @@
 <html lang="en">
     <head>
     <!-- Custom Css -->
-    <link rel="stylesheet" href="css/style_profile.css">
+    <link rel="stylesheet" href="css/style_editprofile.css">
     <!-- FontAwesome 5 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
@@ -16,10 +16,9 @@
         <div class="header-container">
             <div class="header-wrapper">
                 <div class="iconBox1">
-                    <i class="fa-solid fa-arrow-left" id="menu"></i>
+                    <i class="fa-solid fa-arrow-left" id="profile"></i>
                 </div>
                 <div class="iconBox2">
-                    <i class="fa-solid fa-pen-to-square" id="update"></i>
                     <i class="fa-solid fa-circle-half-stroke" id="darkTheme"></i>
                 </div>
             </div>
@@ -33,7 +32,7 @@
             session_start();
             if(isset($_SESSION['firstname']) && isset($_SESSION['lastname'])) {
                 // Display the username instead of "USER PAGE"
-                echo $_SESSION['firstname'] . " " . $_SESSION['lastname'] . "'s Profile";
+                echo $_SESSION['firstname'] . " " . $_SESSION['lastname'] . "'s Profile Edit Page";
             } else {
                 // Display a default message if the username is not set
                 echo "USER PROFILE";
@@ -67,6 +66,7 @@
                             echo "<td class='titolo'>First Name</td>";
                             echo "<td class='punct'>:</td>";
                             echo "<td class='content'>" . $row2['firstname'] . "</td>";
+                            echo "<td class='ed'><button class='cantbtn'>Cannot Edit</button></td>";
                             echo "</tr>";  
                             // ... repeat for other fields ...
                             echo "</tr>";  
@@ -74,46 +74,58 @@
                             echo "<td class='titolo'>Last Name</td>";
                             echo "<td class='punct'>:</td>";
                             echo "<td class='content'>" . $row2['lastname'] . "</td>";
+                            echo "<td class='ed'><button class='cantbtn'>Cannot Edit</button></td>";
                             echo "</tr>";    
                             echo "<tr>";
                             echo "<td class='titolo'>Birth Date</td>";
                             echo "<td class='punct'>:</td>";
                             echo "<td class='content'>" . $row2['birthdate'] . "</td>";
+                            echo "<td class='ed'><button class='cantbtn'>Cannot Edit</button></td>";
                             echo "</tr>"; 
                             echo "<tr>";
                             echo "<td class='titolo'>Gender</td>";
                             echo "<td class='punct'>:</td>";
                             echo "<td class='content'>" . $row2['gender'] . "</td>";
+                            echo "<td class='ed'><button class='cantbtn'>Cannot Edit</button></td>";
                             echo "</tr>"; 
                             echo "<tr>";
                             echo "<td class='titolo'>Home Address</td>";
                             echo "<td class='punct'>:</td>";
                             echo "<td class='content'>" . $row1['homeaddress'] . "</td>";
+                            echo "<td class='ed'><button class='edbtn' onclick='editHome()'>Update</button><p id='demo5'></p></td>";
                             echo "</tr>";  
                             echo "<tr>";
                             echo "<td class='titolo'>Email</td>";
                             echo "<td class='punct'>:</td>";
                             echo "<td class='content'>" . $row2['emailadd'] . "</td>";
+                            echo "<td class='ed'><button class='edbtn' onclick='editEmail()'>Update</button><p id='demo6'></p></td>";
                             echo "</tr>";  
                             echo "<tr>";
                             echo "<td class='titolo'>User Status</td>";
                             echo "<td class='punct'>:</td>";
                             echo "<td class='content'>" . $row2['userstatus'] . "</td>";
+                            echo "<td class='ed'><button class='edbtn' onclick='editStatus()'>Update</button><p id='demo4'></p></td>";
                             echo "</tr>"; 
                             echo "<tr>";
                             echo "<td class='titolo'>Country</td>";
                             echo "<td class='punct'>:</td>";
                             echo "<td class='content'>" . $row1['country'] . "</td>";
+                            echo "<td class='ed'><button class='edbtn' onclick='editCountry()'>Update</button><p id='demo2'></p></td>";
                             echo "</tr>"; 
                             echo "<tr>";
                             echo "<td class='titolo'>Hobbies</td>";
                             echo "<td class='punct'>:</td>";
                             echo "<td class='content'>" . $row1['hobbies'] . "</td>";
+                            echo "<td class='ed'><button class='edbtn' onclick='editHobby()'>Update</button><p id='demo1'></p></td>";
                             echo "</tr>"; 
                             echo "<tr>";
                             echo "<td class='titolo'>Contact Number</td>";
                             echo "<td class='punct'>:</td>";
                             echo "<td class='content'>" . $row1['contactnumber'] . "</td>";
+                            echo "<td class='ed'><button class='edbtn' onclick='editNum()'>Update</button><p id='demo3'></p></td>";
+                            echo "</tr>"; 
+                            echo "<tr>";
+                            echo "<td class='sub' colspan='5'><button class='submitbtn' onclick='submit()'>Submit</button></td>";
                             echo "</tr>"; 
                         } else {
                             echo "<tr><td colspan='9'>No users found</td></tr>";
@@ -121,34 +133,29 @@
 
                         // Close the connection
                         $connection->close();
-                    ?>
+                ?>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+    
+    <script src="js/editprofile.js"></script>
 
     <script>
-        const menu = document.getElementById("menu");
-        menu.onclick = goMenu;
+        const menu = document.getElementById("profile");
+        menu.onclick = goProfile;
 
         const dark = document.getElementById("darkTheme");
         dark.onclick = setDark;
 
-        const up = document.getElementById("update");
-        up.onclick = goUpdate;
-
-        function goMenu(){
-        window.location.href = "userpage.php";
+        function goProfile(){
+        window.location.href = "profile.php";
         }
 
         function setDark(){
         dark.classList.toggle("button-Active");
         document.body.classList.toggle("dark-color");
-        }
-
-        function goUpdate(){
-        window.location.href = "editprofile.php";
         }
     </script>
 </body>

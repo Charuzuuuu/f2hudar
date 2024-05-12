@@ -77,14 +77,14 @@ header{
 }
 
 .iconBox1 {
-    width: 15%;
+    width: 10%;
     display: flex;
     padding: 0 25px;
     justify-content: space-between;
 }
 
 .iconBox2{
-    width: 30%;
+    width: 60%;
     display: flex;
     margin-left: 55%;
     padding: 0 25px;
@@ -132,8 +132,3 @@ header{
     left: 4px;
     transition: .5s;
 }
-
-
-
-
-

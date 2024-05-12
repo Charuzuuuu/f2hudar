@@ -109,9 +109,10 @@
         button{
             margin: 10px;
         }
+        
 
     </style>
-    <link rel="stylesheet" href="css/style_userpage.css">
+    <link rel="stylesheet" href="css/style_dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
 </head>
@@ -124,9 +125,13 @@
                     <i class="fa-solid fa-arrow-left" id="userpage"></i>
                 </div>
                 <div class="iconBox2">
-                    <i class="fa-solid fa-circle-plus" id="report"></i>
-                    <i class="fa-solid fa-plus" id="add_admin"></i>
-                    <label id="dash_label">Add New Admin</label>
+                    <div>
+                        <i class="fa-solid fa-circle-plus" id="report"></i>
+                    </div>
+                    <div>
+                        <i class="fa-solid fa-plus" id="add_admin"></i>
+                        <label id="dash_label">Add New Admin</label>
+                    </div>
                 </div>
             </div>
         </div>

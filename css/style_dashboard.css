@@ -91,10 +91,9 @@ header{
     justify-content: space-between;
 }
 
+
 #dash_label{
-    margin: 8px 70px 0 0;
     font-size:x-large;
-    ;
 }
 
 .iconBox1 i, .iconBox2 i{
@@ -132,6 +131,8 @@ header{
     left: 4px;
     transition: .5s;
 }
+
+
 
 
 

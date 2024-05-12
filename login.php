@@ -112,9 +112,10 @@
 			$result_acc2 = mysqli_query($connection, $sql_acc2);
 			$count_acc2 = mysqli_num_rows($result_acc2);
 
-			if ($count_acc > 0 && $count_acc2 > 0) {
+			if ($count_acc2 > 0) {
 				$row_acc = mysqli_fetch_array($result_acc);
 				$row_acc2 = mysqli_fetch_array($result_acc2);
+				$_SESSION['userid'] = $row_acc['userid'];
 				$_SESSION['firstname'] = $row_acc['firstname'];
 				$_SESSION['lastname'] = $row_acc['lastname'];
 				$_SESSION['gender'] = $row_acc['gender'];
@@ -125,8 +126,11 @@
 				$_SESSION['homeaddress'] = $row_acc2['homeaddress'];
 				$_SESSION['country'] = $row_acc2['country'];
 				$_SESSION['contactnumber'] = $row_acc2['contactnumber'];
+
+				header("location: userpage.php");
+			}else{
+				header("location: dashboard.php");
 			} 
-			header("location: userpage.php");
 		}
 	}
 ?>
