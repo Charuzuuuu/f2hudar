@@ -1,7 +1,34 @@
 <?php
     include 'connect.php';
+    $genderQuery = "SELECT gender, COUNT(*) AS gender_count FROM tbluserprofile GROUP BY gender";
+    $genderResult = mysqli_query($connection, $genderQuery);
+    $genderDataPoints = array();
+
+    // Check if there are any records
+    if (mysqli_num_rows($genderResult) > 0) {
+        // Loop through each row of data
+        while ($row = mysqli_fetch_assoc($genderResult)) {
+            // Add data to the genderDataPoints array
+            $genderDataPoints[] = array("label" => $row['gender'], "y" => $row['gender_count']);
+        }
+    }
+
+    // Query to fetch total counts of users within different age ranges
+    $ageRangeQuery = "SELECT 
+                        SUM(CASE WHEN TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) < 18 THEN 1 ELSE 0 END) AS age_18_below,
+                        SUM(CASE WHEN TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) >= 18 AND TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) < 30 THEN 1 ELSE 0 END) AS age_18_30,
+                        SUM(CASE WHEN TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) >= 30 AND TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) < 40 THEN 1 ELSE 0 END) AS age_30_40,
+                        SUM(CASE WHEN TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) >= 40 THEN 1 ELSE 0 END) AS age_40_above
+                    FROM tbluserprofile";
+    $ageRangeResult = mysqli_query($connection, $ageRangeQuery);
+    $ageRangeRow = mysqli_fetch_assoc($ageRangeResult);
+    $ageRangeDataPoints = array(
+        array("label" => "Age 18 and Below", "y" => $ageRangeRow['age_18_below']),
+        array("label" => "Age 18 - 30", "y" => $ageRangeRow['age_18_30']),
+        array("label" => "Age 30 - 40", "y" => $ageRangeRow['age_30_40']),
+        array("label" => "Age 40 and Above", "y" => $ageRangeRow['age_40_above'])
+    );
 ?>
- 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +36,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Table</title>
     <link rel="stylesheet" href="css/style_report.css">
+    <script src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body {
@@ -139,6 +167,14 @@
             cursor: pointer;
             margin: 10px 0 0 0;
         }
+        #exitChartBtn{
+            background-color: #ff0000;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0 0 0;
+        }
  
     </style>
 </head>
@@ -148,7 +184,7 @@
         <div class="header-container">
             <div class="header-wrapper">
                 <div class="iconBox1">
-                    <i class="fa-solid fa-arrow-left" id="userpage"></i>
+                    <i class="fa-solid fa-arrow-left" id="dashboardpage"></i>
                 </div>    
                 <div class="iconBox2">
                     <div class="dropdown">
@@ -184,6 +220,7 @@
                         </div>
                     </div>
                     <button class="dropbtn"id="totalCountBtn">Total</button>
+                    <button class="dropbtn"id="chartBtn">Chart</button>
                 </div>
             </div>
         </div>
@@ -335,52 +372,100 @@
     <!-- Popup table for total counts -->
     <div id="popup" class="popup">
     <h2>Total Counts</h2>
-    <table>
-        <!-- Display total counts for each status -->
-        <?php foreach ($totalCountArray as $statusKey => $totalCount): ?>
-            <tr>
-                <td><?= $statusKey ?></td>
-                <td><?= $totalCount ?></td>
-            </tr>
-        <?php endforeach; ?>
-        <!-- Include total counts for each gender -->
+<table>
+    <!-- Display total counts for each status -->
+    <?php foreach ($totalCountArray as $statusKey => $totalCount): ?>
         <tr>
-            <td>Male</td>
-            <td>
-                <?php
-                // Query to fetch total count of males
-                $maleCountQuery = "SELECT COUNT(*) AS male_count FROM tbluserprofile WHERE gender = 'Male'";
-                $maleCountResult = mysqli_query($connection, $maleCountQuery);
-                $maleCountRow = mysqli_fetch_assoc($maleCountResult);
-                echo $maleCountRow['male_count'];
-                ?>
-            </td>
+            <td><?= $statusKey ?></td>
+            <td><?= $totalCount ?></td>
         </tr>
-        <tr>
-            <td>Female</td>
-            <td>
-                <?php
-                // Query to fetch total count of females
-                $femaleCountQuery = "SELECT COUNT(*) AS female_count FROM tbluserprofile WHERE gender = 'Female'";
-                $femaleCountResult = mysqli_query($connection, $femaleCountQuery);
-                $femaleCountRow = mysqli_fetch_assoc($femaleCountResult);
-                echo $femaleCountRow['female_count'];
-                ?>
-            </td>
-        </tr>
-    </table>
-    <!-- Exit button to hide the popup -->
-    <button id="exitBtn">Exit</button>
+    <?php endforeach; ?>
+    <!-- Include total counts for each gender -->
+    <tr>
+        <td>Male</td>
+        <td>
+            <?php
+            // Query to fetch total count of males
+            $maleCountQuery = "SELECT COUNT(*) AS male_count FROM tbluserprofile WHERE gender = 'Male'";
+            $maleCountResult = mysqli_query($connection, $maleCountQuery);
+            $maleCountRow = mysqli_fetch_assoc($maleCountResult);
+            echo $maleCountRow['male_count'];
+            ?>
+        </td>
+    </tr>
+    <tr>
+        <td>Female</td>
+        <td>
+            <?php
+            // Query to fetch total count of females
+            $femaleCountQuery = "SELECT COUNT(*) AS female_count FROM tbluserprofile WHERE gender = 'Female'";
+            $femaleCountResult = mysqli_query($connection, $femaleCountQuery);
+            $femaleCountRow = mysqli_fetch_assoc($femaleCountResult);
+            echo $femaleCountRow['female_count'];
+            ?>
+        </td>
+    </tr>
+    <!-- Calculate and display total count of users within the 18-30 age range -->
+    <?php
+    // Query to fetch total count of users within the 18-30 age range
+    $ageRangeCountQuery = "SELECT COUNT(*) AS age_range_count FROM tbluserprofile WHERE TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) >= 18 AND TIMESTAMPDIFF(YEAR, birthdate, CURDATE()) <= 30";
+    $ageRangeCountResult = mysqli_query($connection, $ageRangeCountQuery);
+    $ageRangeCountRow = mysqli_fetch_assoc($ageRangeCountResult);
+    ?>
+    <tr>
+        <td>Total Users (Age 18-30)</td>
+        <td><?= $ageRangeCountRow['age_range_count'] ?></td>
+    </tr>
+</table>
+<!-- Exit button to hide the popup -->
+<button id="exitBtn">Exit</button>
 </div>
- 
+ <!-- Popup div for pie chart -->
+ <div id="pieChartPopup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); width: 700px; height: 400px;">
+    <div id="chartContainer" style="height: 320px; width: 100%;"></div>
+    <button id="exitChartBtn">Exit</button>
+</div>
+
+    <script>
+        document.getElementById('chartBtn').addEventListener('click', function() {
+            // Show the pie chart popup
+            document.getElementById('pieChartPopup').style.display = 'block';
+            // Call the function to render the pie chart
+            renderPieChart();
+        });
+
+        document.getElementById('exitChartBtn').addEventListener('click', function() {
+            // Hide the pie chart popup
+            document.getElementById('pieChartPopup').style.display = 'none';
+        });
+
+        function renderPieChart() {
+            var chart = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+                title: {
+                    text: "Age Range Distribution"
+                },
+                data: [{
+                    type: "pie",
+                    showInLegend: "true",
+                    legendText: "{label}",
+                    indexLabelFontSize: 16,
+                    indexLabel: "{label} - #percent%",
+                    yValueFormatString: "#,##0",
+                    dataPoints: <?php echo json_encode($ageRangeDataPoints, JSON_NUMERIC_CHECK); ?>
+                }]
+            });
+            chart.render();
+        }
+    </script>
 </body>
  
    <script>
-    const menu = document.getElementById("userpage");
-    menu.addEventListener('click', goMenu);
+    const dashboard = document.getElementById("dashboardpage");
+    dashboard.addEventListener('click', goDashboard);
  
-    function goMenu(){
-        window.location.href = "userpage.php";
+    function goDashboard(){
+        window.location.href = "dashboard.php";
     }
  
     // Function to handle the click event of the total count button

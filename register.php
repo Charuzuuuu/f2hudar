@@ -29,7 +29,7 @@
             Birthdate(YYYY-MM-DD):<input type="text" name="txtbirthdate"> <br>    
             </div>
             <div class="input-reg">
-            Civil Status:<input type="text" name="txtstatus"> <br>    
+            Civil Status:<input type="text" name="txtuserstatus"> <br>    
             </div>
             <div class="input-reg">  
             Gender:
@@ -84,7 +84,9 @@
         $lname=$_POST['txtlastname'];
         $gender=$_POST['txtgender'];
         $birthdate=$_POST['txtbirthdate'];
-        $userstatus=$_POST['txtstatus'];
+        $userstatus=$_POST['txtuserstatus']; // This is for civil status
+        $status = 1; // Default status
+        
         $email=$_POST['txtemail'];        
         
         //for tbluseraccount        
@@ -105,7 +107,7 @@
 
         if($row_acc == 0 && $row_prof == 0){
             //save data to tbluserprofile            
-            $sql1 ="INSERT INTO tbluserprofile(firstname, lastname, gender, emailadd, birthdate, userstatus) VALUES ('".$fname."','".$lname."','".$gender."','".$email."','".$birthdate."','".$userstatus."')";
+            $sql1 ="INSERT INTO tbluserprofile(firstname, lastname, gender, emailadd, birthdate, userstatus, status) VALUES ('".$fname."','".$lname."','".$gender."','".$email."','".$birthdate."','".$userstatus."', '".$status."')";
             mysqli_query($connection,$sql1);
 
             $last_id = mysqli_insert_id($connection);

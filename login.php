@@ -51,88 +51,106 @@
 </html>
 
 <?php	
-	if(isset($_POST['btnLogin'])){
-		$uname=$_POST['txtusername'];
-		$pwd=$_POST['txtpassword'];
-		//check tbluseraccount if username is existing
-		$sql_user ="Select * from tbluseraccount where username='".$uname."'";
-		$sql_admin ="Select * from tbluseradmin where username='".$uname."'";
-		
-		$result_user = mysqli_query($connection,$sql_user);
-		$result_admin = mysqli_query($connection,$sql_admin);
+    if(isset($_POST['btnLogin'])){
+        $uname=$_POST['txtusername'];
+        $pwd=$_POST['txtpassword'];
+        // Check tbluseraccount if username is existing
+        $sql_user ="SELECT * FROM tbluseraccount WHERE username='".$uname."'";
+        $sql_admin ="SELECT * FROM tbluseradmin WHERE username='".$uname."'";
+        
+        $result_user = mysqli_query($connection,$sql_user);
+        $result_admin = mysqli_query($connection,$sql_admin);
 
-		$count_user = mysqli_num_rows($result_user);
-		$count_admin = mysqli_num_rows($result_admin);
+        $count_user = mysqli_num_rows($result_user);
+        $count_admin = mysqli_num_rows($result_admin);
 
-		$row_user = mysqli_fetch_array($result_user);
-		$row_admin = mysqli_fetch_array($result_admin);
+        $row_user = mysqli_fetch_array($result_user);
+        $row_admin = mysqli_fetch_array($result_admin);
 
-		$hashed_password_user = $row_user['password'];
-		$hashed_password_admin = $row_admin['password'];
-		
-		if($count_user == 0 && $count_admin == 0){
-			?>
-			<script>
-				swal({
-					title: "Failed",
-					text: "Username not existing",
-					icon: "error",
-				});
-			</script> 
-			<?php
-		}else if(!password_verify($pwd, $hashed_password_user) && !password_verify($pwd, $hashed_password_admin))	 {
-			?>
-			<script>
-				swal({
-					title: "Failed",
-					text: "Incorrect password",
-					icon: "error",
-				});
-			</script> 
-			<?php
-		}else{
-			session_start();
-			// Fetch the username from tbluseraccount
-			$sql_user = "SELECT * FROM tbluseraccount WHERE username='".$uname."'";
-			$result_user = mysqli_query($connection, $sql_user);
-			$count_user = mysqli_num_rows($result_user);
-			
-			if ($count_user > 0) {
-				// Fetch the row from the result set
-				$row_user = mysqli_fetch_array($result_user);
-				// Set the session username to the fetched username
-				$userID = $row_user['acctid'];
-			} 
+        $hashed_password_user = $row_user['password'];
+        $hashed_password_admin = $row_admin['password'];
+        
+        if($count_user == 0 && $count_admin == 0){
+            ?>
+            <script>
+                swal({
+                    title: "Failed",
+                    text: "Username not existing",
+                    icon: "error",
+                });
+            </script> 
+            <?php
+        } else if(!password_verify($pwd, $hashed_password_user) && !password_verify($pwd, $hashed_password_admin))	 {
+            ?>
+            <script>
+                swal({
+                    title: "Failed",
+                    text: "Incorrect password",
+                    icon: "error",
+                });
+            </script> 
+            <?php
+        } else {
+            session_start();
+            // Fetch the username from tbluseraccount
+            $sql_user = "SELECT * FROM tbluseraccount WHERE username='".$uname."'";
+            $result_user = mysqli_query($connection, $sql_user);
+            $count_user = mysqli_num_rows($result_user);
+            
+            if ($count_user > 0) {
+                // Fetch the row from the result set
+                $row_user = mysqli_fetch_array($result_user);
+                // Set the session username to the fetched username
+                $userID = $row_user['acctid'];
+            } 
 
-			$sql_acc = "SELECT * FROM tbluserprofile WHERE userid='".$userID."'";
-			$result_acc = mysqli_query($connection, $sql_acc);
-			$count_acc = mysqli_num_rows($result_acc);
+            $sql_acc = "SELECT * FROM tbluserprofile WHERE userid='".$userID."'";
+            $result_acc = mysqli_query($connection, $sql_acc);
+            $count_acc = mysqli_num_rows($result_acc);
 
-			$sql_acc2 = "SELECT * FROM tblprofile WHERE profileid='".$userID."'";
-			$result_acc2 = mysqli_query($connection, $sql_acc2);
-			$count_acc2 = mysqli_num_rows($result_acc2);
+            $sql_acc2 = "SELECT * FROM tblprofile WHERE profileid='".$userID."'";
+            $result_acc2 = mysqli_query($connection, $sql_acc2);
+            $count_acc2 = mysqli_num_rows($result_acc2);
 
-			if ($count_acc2 > 0) {
-				$row_acc = mysqli_fetch_array($result_acc);
-				$row_acc2 = mysqli_fetch_array($result_acc2);
-				$_SESSION['userid'] = $row_acc['userid'];
-				$_SESSION['firstname'] = $row_acc['firstname'];
-				$_SESSION['lastname'] = $row_acc['lastname'];
-				$_SESSION['gender'] = $row_acc['gender'];
-				$_SESSION['emailadd'] = $row_acc['emailadd'];
-				$_SESSION['birthdate'] = $row_acc['birthdate'];
-				$_SESSION['userstatus'] = $row_acc['userstatus'];
-				$_SESSION['hobbies'] = $row_acc2['hobbies'];
-				$_SESSION['homeaddress'] = $row_acc2['homeaddress'];
-				$_SESSION['country'] = $row_acc2['country'];
-				$_SESSION['contactnumber'] = $row_acc2['contactnumber'];
+            if ($count_acc2 > 0) {
+                $row_acc = mysqli_fetch_array($result_acc);
+                $row_acc2 = mysqli_fetch_array($result_acc2);
 
-				header("location: userpage.php");
-			}else{
-				header("location: dashboard.php");
-			} 
-		}
-	}
+                if ($row_acc['status'] == 0) {
+                    ?>
+                    <script>
+                        swal({
+                            title: "Failed",
+                            text: "Your account is deactivated. You cannot log in.",
+                            icon: "error",
+                        });
+                    </script>
+                    <?php
+                } else {
+                    $_SESSION['userid'] = $row_acc['userid'];
+                    $_SESSION['firstname'] = $row_acc['firstname'];
+                    $_SESSION['lastname'] = $row_acc['lastname'];
+                    $_SESSION['gender'] = $row_acc['gender'];
+                    $_SESSION['emailadd'] = $row_acc['emailadd'];
+                    $_SESSION['birthdate'] = $row_acc['birthdate'];
+                    $_SESSION['userstatus'] = $row_acc['userstatus'];
+                    $_SESSION['hobbies'] = $row_acc2['hobbies'];
+                    $_SESSION['homeaddress'] = $row_acc2['homeaddress'];
+                    $_SESSION['country'] = $row_acc2['country'];
+                    $_SESSION['contactnumber'] = $row_acc2['contactnumber'];
+
+                    if ($count_acc > 0) {
+                        header("location: userpage.php");
+                    } else {
+                        header("location: dashboard.php");
+                    }
+                }
+            } else {
+                header("location: dashboard.php");
+            }
+        }
+    }
 ?>
+
 
 <?php include_once("includes/footer.php"); ?>
