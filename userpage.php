@@ -20,7 +20,6 @@
             <div class="header-wrapper">
                 <div class="iconBox1">
                     <i class="fa-solid fa-arrow-left" id="menu"></i>
-                    <i class="fa-solid fa-user-tie" id="dashboard"></i>
                 </div>
                 <div class="iconBox2">
                     <i class="fa-solid fa-house"></i>
