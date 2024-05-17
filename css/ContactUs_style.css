@@ -32,6 +32,28 @@
     margin-bottom: 20px;
     color: #333;
 }
-input, textarea{
+ textarea{
     width: 100%;
 }
+
+.loglink {
+    width: 20%;
+    margin: 50px auto 0px auto;
+    text-align: center;
+}
+
+.loglink input {
+        width: auto;
+        margin: 0px auto;
+        font-size: 16px;
+        text-decoration: bold;
+        border: 2px solid rgba(0, 0, 0, 0);
+        backdrop-filter: blur(20px);
+        box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+        border-radius: 10px;
+        padding: 20px;
+        color: #ffffff;
+        background-color: black;
+        outline: none;
+        cursor: pointer;
+ }
