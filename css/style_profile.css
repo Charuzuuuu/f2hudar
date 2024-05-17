@@ -8,14 +8,14 @@
   font-family: 'Poppins', sans-serif;
 }
 
-:root{
-  --background: #d1deec;
-  --foreground: #f1f3f5;
-  --white: #fff;
-  --black: #000;
-  --gray: #6e6e6e;
-  --shadow: #76767663;
-  --border: #cfcfcf;
+:root {
+    --background: #41C9E2;
+    --foreground: #f1f3f5;
+    --white: #fff;
+    --black: #000;
+    --gray: #6e6e6e;
+    --shadow: #76767663;
+    --border: #cfcfcf;
 }
 
 
